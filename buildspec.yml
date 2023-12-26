@@ -24,4 +24,5 @@ artifacts:
 
 cache:
   paths:
-    - '/root/
+    - '/root/.m2/**/*'
+    - '/root/.gradle/**/*'
