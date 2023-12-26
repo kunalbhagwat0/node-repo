@@ -11,20 +11,20 @@ phases:
       - REPOSITORY_URI=425302025161.dkr.ecr.ap-south-1.amazonaws.com/hello-xxxxx
       - COMMIT_HASH=$(echo $CODEBUILD_RESOLVED_SOURCE_VERSION | cut -c 1-7)
       - IMAGE_TAG=build-$(echo $CODEBUILD_BUILD_ID | awk -F":" '{print $2}')
-  build:
-    commands:
-      - echo Build started on date
-      - echo Building the Docker image...
-      - docker build -t $REPOSITORY_URI:latest .
-      - docker tag $REPOSITORY_URI:latest $REPOSITORY_URI:latest
-  post_build:
-    commands:
-      - echo Build completed on date
-      - echo Pushing the Docker Image...
-      - docker push $REPOSITORY_URI:hello-xxxxx
-      - docker push $REPOSITORY_URI:latest
-      - echo Writing image definitions file...
-      - printf '[{"name":"chalo","imageUri":"%s"}]' $REPOSITORY_URI:$latest > imagedefinitions.json
-      - cat imagedefinitions.json
+build:
+  commands:
+    - echo Build started on date
+    - echo Building the Docker image...
+    - docker build -t $REPOSITORY_URI:latest .
+    - docker tag $REPOSITORY_URI:latest $REPOSITORY_URI:hello-xxxxx  # Add this line to tag with hello-xxxxx
+post_build:
+  commands:
+    - echo Build completed on date
+    - echo Pushing the Docker Image...
+    - docker push $REPOSITORY_URI:hello-xxxxx  # Update this line
+    - docker push $REPOSITORY_URI:latest
+    - echo Writing image definitions file...
+    - printf '[{"name":"chalo","imageUri":"%s"}]' $REPOSITORY_URI:latest > imagedefinitions.json
+    - cat imagedefinitions.json
 artifacts:
     files: imagedefinitions.json
