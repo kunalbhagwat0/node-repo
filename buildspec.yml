@@ -1,22 +1,27 @@
 version: 0.2
 
 phases:
+  install:
+    commands:
+      - apt-get update -y
+      - apt-get install -y awscli
+
   pre_build:
     commands:
       - echo Logging in to Amazon ECR...
       - $(aws ecr get-login-password --region ap-south-1)
 
-build:
-  commands:
-    - echo Building Docker image...
-    - docker build -t hello-xxxxx .
-    - echo Tagging Docker image...
-    - docker tag hello-xxxxx:latest 425302025161.dkr.ecr.ap-south-1.amazonaws.com/hello-xxxxx:latest
+  build:
+    commands:
+      - echo Building Docker image...
+      - docker build -t hello-xxxxx .
+      - echo Tagging Docker image...
+      - docker tag hello-xxxxx:latest 425302025161.dkr.ecr.ap-south-1.amazonaws.com/hello-xxxxx:latest
 
-post_build:
-  commands:
-    - echo Pushing Docker image to Amazon ECR...
-    - docker push 425302025161.dkr.ecr.ap-south-1.amazonaws.com/hello-xxxxx:latest
+  post_build:
+    commands:
+      - echo Pushing Docker image to Amazon ECR...
+      - docker push 425302025161.dkr.ecr.ap-south-1.amazonaws.com/hello-xxxxx:latest
 
 artifacts:
   files: '*'
