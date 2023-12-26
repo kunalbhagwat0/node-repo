@@ -26,6 +26,6 @@ pipelines:
           configuration:
             ClusterName: DevStaxxx
             ServiceName: service-tho-hai
-            Image1ArtifactName: BuildOutput::imagedefinitions.json
-            Image1ContainerName: hello-xxxxx
+            Image1ArtifactName: BuildOutput::random.json
+            Image1ContainerName: chalo
             Image1RegistryName: 425302025161.dkr.ecr.sp-south-1.amazonaws.com/hello-xxxxx
