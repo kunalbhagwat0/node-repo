@@ -4,7 +4,7 @@ phases:
   pre_build:
     commands:
       - echo Logging in to Amazon ECR...
-      - aws ecr get-login-password --region ap-south-1 | docker login --username AWS --password-stdin 425302025161.dkr.ecr.ap-south-1.amazonaws.com
+      - $(aws ecr get-login-password --region ap-south-1)
 
 build:
   commands:
@@ -24,5 +24,4 @@ artifacts:
 
 cache:
   paths:
-    - '/root/.m2/**/*'
-    - '/root/.gradle/**/*'
+    - '/root/
