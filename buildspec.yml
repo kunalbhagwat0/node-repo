@@ -1,15 +1,6 @@
 version: 0.2
 
 phases:
-  install:
-    runtime-versions:
-      python: 3.8
-
   build:
     commands:
-      - echo Build started on `date`
-      - pip install -r requirements.txt
-      - echo Build completed on `date`
-
-artifacts:
-  files: app.py
+      - echo "Hello, World!"
