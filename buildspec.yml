@@ -1,33 +1,31 @@
 version: 0.2
 
-phases:
-  install:
-    commands:
-      - apt-get update -y
-      - apt-get install -y awscli
+pipelines:
+  default:
+    - name: HelloWorldPipeline
+      steps:
+        - name: Source
+          action: aws-codepipeline-source-action
+          outputs:
+            - MySourceOutput
+          configuration:
+            BranchName: main
+            RepositoryName: https://github.com/kunalbhagwat0/Helloworld
 
-pre_build:
-  commands:
-    - echo Logging in to Amazon ECR...
-    - $(aws ecr get-login-password --region ap-south-1)
+        - name: Build
+          action: aws-codepipeline-build-action
+          inputs:
+            - MySourceOutput
+          outputs:
+            - BuildOutput
 
-build:
-  commands:
-    - echo Building Docker image...
-    - docker build -t hello-xxxxx .
-    - echo Tagging Docker image...
-    - docker tag hello-xxxxx:latest 425302025161.dkr.ecr.ap-south-1.amazonaws.com/hello-xxxxx:latest
-
-post_build:
-  commands:
-    - echo Pushing Docker image to Amazon ECR...
-    - docker push 425302025161.dkr.ecr.ap-south-1.amazonaws.com/hello-xxxxx:latest
-
-artifacts:
-  files: '*'
-  discard-paths: yes
-
-cache:
-  paths:
-    - '/root/.m2/**/*'
-    - '/root/.gradle/**/*'
+        - name: Deploy
+          action: aws-codepipeline-deploy-to-ecs-action
+          inputs:
+            - BuildOutput
+          configuration:
+            ClusterName: DevStaxxx
+            ServiceName: service-tho-hai
+            Image1ArtifactName: BuildOutput::imagedefinitions.json
+            Image1ContainerName: hello-xxxxx
+            Image1RegistryName: 425302025161.dkr.ecr.sp-south-1.amazonaws.com/hello-xxxxx
