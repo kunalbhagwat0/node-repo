@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# Set execute permission for the script
+chmod +x "$0"
+
 # Install Apache web server
 apt-get update
 apt-get install -y apache2
