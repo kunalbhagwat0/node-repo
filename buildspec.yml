@@ -1,30 +1,31 @@
 version: 0.2
 
-
 phases:
+  install:
+    runtime-versions:
+      java: openjdk11
+    commands:
+      - echo "Installing dependencies..."
+      # Add any commands needed to install dependencies for your project
+
   pre_build:
     commands:
-      - echo Logging in to Amazon ECR...
-      - aws --version
-      #- $(aws ecr get-login --region ap-south-1 --no-include-email)
-      - aws ecr get-login-password --region ap-south-1 | docker login --username AWS --password-stdin 425302025161.dkr.ecr.ap-south-1.amazonaws.com
-      - REPOSITORY_URI=425302025161.dkr.ecr.ap-south-1.amazonaws.com/hello-xxxxx
-      - COMMIT_HASH=$(echo $CODEBUILD_RESOLVED_SOURCE_VERSION | cut -c 1-7)
-      - IMAGE_TAG=build-$(echo $CODEBUILD_BUILD_ID | awk -F":" '{print $2}')
-build:
-  commands:
-    - echo Build started on date
-    - echo Building the Docker image...
-    - docker build -t $REPOSITORY_URI:latest .
-    - docker tag $REPOSITORY_URI:latest $REPOSITORY_URI:hello-xxxxx  # Add this line to tag with hello-xxxxx
-post_build:
-  commands:
-    - echo Build completed on date
-    - echo Pushing the Docker Image...
-    - docker push $REPOSITORY_URI:hello-xxxxx  # Update this line
-    - docker push $REPOSITORY_URI:latest
-    - echo Writing image definitions file...
-    - printf '[{"name":"chalo","imageUri":"%s"}]' $REPOSITORY_URI:latest > imagedefinitions.json
-    - cat imagedefinitions.json
+      - echo "Pre-build phase..."
+      # Add any commands needed before the build process
+
+  build:
+    commands:
+      - echo "Building the application..."
+      # Add the commands needed to build your application (e.g., compile code, package artifacts)
+
 artifacts:
-    files: imagedefinitions.json
+  files: 
+    - '**/*'
+  name: my-application-artifact
+  discard-paths: yes
+  # You might need to adjust the 'files' pattern based on your project structure
+
+cache:
+  paths:
+    - '/root/.m2/**/*'
+    # Add any other paths that can be cached to speed up the build process
