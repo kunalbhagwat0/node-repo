@@ -2,8 +2,19 @@ version: 0.0
 os: linux
 files:
   - source: /
-    destination: /var/www/html
+    destination: /home/ubuntu/your-app-directory
+permissions:
+  - object: /home/ubuntu/your-app-directory
+    pattern: "**"
+    owner: ubuntu
+    group: ubuntu
 hooks:
+  BeforeInstall:
+    - location: scripts/before-install.sh
+      runas: root
   AfterInstall:
-    - location: scripts/install_dependencies.sh
+    - location: scripts/after-install.sh
+      runas: root
+  ApplicationStart:
+    - location: scripts/application-start.sh
       runas: root
